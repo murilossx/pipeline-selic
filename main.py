@@ -1,6 +1,7 @@
 import requests
+import csv
 
-data_inicial = "01/01/2025"
+data_inicial = "01/01/2023"
 data_final = "31/12/2025"
 url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial={data_inicial}&dataFinal={data_final}"
 resposta = requests.get(url)
@@ -24,3 +25,11 @@ for dado in dados:
 media = soma / len(dados)
 print(f"\nMédia da Selic no período: {media:.2f}%")
 
+headers = ["data", "valor"]
+
+with open("selic.csv", mode="w", newline="", encoding="utf-8") as file:
+    writer = csv.DictWriter(file, fieldnames=headers)
+    writer.writeheader()
+    writer.writerows(dados)
+    
+print("CSV exportado pra pasta.")
